@@ -1,0 +1,13 @@
+name             'mysql_config'
+maintainer       'greg lane'
+maintainer_email 'glane@gannett.com'
+license          'All rights reserved'
+description      'Installs/Configures mysql_config'
+long_description 'Installs/Configures mysql_config'
+version          '0.1.0'
+
+depends 'mysql'
+depends 'lvm'
+depends 'selinux'
+depends 'sysctl'
+depends 'limits'

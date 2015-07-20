@@ -1,0 +1,48 @@
+# test config
+
+[mysqld_safe]
+user = mysql
+port = 3306
+datadir = /data/mysql
+
+[mysqld]
+#general settings
+max_allowed_packet = 64M
+open-files-limit = 65535
+myisam-recover = FORCE,BACKUP
+query_cache_size = 0
+query_cache_type = 0
+sysdate-is-now = 1
+skip-external-locking
+skip-name-resolve
+
+#log settings
+log-warnings = 2
+log_output = file
+slow-query-log = OFF
+slow-query-log-file = /logs/mysql/mysql-slow.log
+general_log_file = /logs/mysql/general.log
+
+#binlog settings
+log-bin = /logs/mysql/bin-logs/mysql-bin
+binlog-format = ROW
+master-info-file = /logs/mysql/master.info
+relay-log = /logs/mysql/relay-logs/relay-bin
+relay-log-index = /logs/mysql/relay-logs/relay-bin.index
+relay-log-info-file = /logs/mysql/relay-log.info
+log-slave-updates
+expire_logs_days = 7
+
+#innodb settings
+innodb_file_per_table = 1
+innodb_buffer_pool_size = 2G
+innodb_buffer_pool_instances = 4
+innodb_data_home_dir = /data/mysql
+innodb_data_file_path = ibdata1:10M:autoextend
+innodb_log_files_in_group = 2
+innodb_log_group_home_dir = /logs/mysql
+innodb_log_file_size = 128M
+innodb_log_buffer_size = 48M
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = 2
+innodb_stats_on_metadata = OFF

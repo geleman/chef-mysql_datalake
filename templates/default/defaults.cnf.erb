@@ -1,0 +1,48 @@
+#default configs
+
+[mysqld_safe]
+user = <%= node['mysql_config']['user'] %>
+port = <%= node['mysql_config']['port'] %>
+datadir = /data/mysql
+
+[mysqld]
+#general settings
+max_allowed_packet = <%= node['mysql_config']['max_allowed_packet'] %>
+open-files-limit = 65535
+myisam-recover = FORCE,BACKUP
+query_cache_size = 0
+query_cache_type = 0
+sysdate-is-now = 1
+skip-external-locking
+skip-name-resolve
+
+#log settings
+log-warnings = 2
+log_output = file
+slow-query-log = <%= node['mysql_config']['slow_query_log'] %>
+slow-query-log-file = /logs/mysql/mysql-slow.log
+general_log_file = /logs/mysql/general.log
+
+#binlog settings
+log-bin = /logs/mysql/bin-logs/mysql-bin
+binlog-format = <%= node['mysql_config']['binlog_format'] %>
+master-info-file = /logs/mysql/master.info
+relay-log = /logs/mysql/relay-logs/relay-bin
+relay-log-index = /logs/mysql/relay-logs/relay-bin.index
+relay-log-info-file = /logs/mysql/relay-log.info
+log-slave-updates
+expire_logs_days = <%= node['mysql_config']['expire_logs_days'] %>
+
+#innodb settings
+innodb_file_per_table = <%= node['mysql_config']['innodb_file_per_table'] %>
+innodb_buffer_pool_size = <%= node['mysql_config']['innodb_buffer_pool_size'] %>
+innodb_buffer_pool_instances = <%= node['mysql_config']['innodb_buffer_pool_instances'] %>
+innodb_data_home_dir = /data/mysql
+innodb_data_file_path = ibdata1:10M:autoextend
+innodb_log_files_in_group = <%= node['mysql_config']['innodb_log_files_in_group'] %>
+innodb_log_group_home_dir = /logs/mysql
+innodb_log_file_size = <%= node['mysql_config']['innodb_log_file_size'] %>
+innodb_log_buffer_size = <%= node['mysql_config']['innodb_log_buffer_size'] %>
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = <%= node['mysql_config']['innodb_flush_log_at_trx_commit'] %>
+innodb_stats_on_metadata = <%= node['mysql_config']['innodb_stats_on_metadata'] %>
