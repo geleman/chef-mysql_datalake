@@ -20,3 +20,21 @@ mysql_database_user 'hiveuser' do
   password hiveopts['password']
   action :grant
 end
+
+cookbook_file '/tmp/hive-schema-0.13.0.mysql.sql' do
+  source 'hive-schema-0.13.0.mysql.sql'
+  owner 'root'
+  mode '0644'
+  action :create
+end
+
+mysql_database 'metastore' do
+  connection mysql_connection_info
+  sql 'source /tmp/hive-schema-0.13.0.mysql.sql;'
+end
+
+ execute 'import_schema' do
+   command "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock metastore < /tmp/hive-schema-0.13.0.mysql.sql;"
+   action :run
+ end
+
