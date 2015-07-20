@@ -4,7 +4,8 @@ hiveopts = data_bag_item('mysql','datalake_mysql_hive_pw')
 mysql_connection_info = {
   :host => 'localhost',
   :username => 'root',
-  :password => opts['password']
+  :password => opts['password'],
+  :socket => '/tmp/mysqld.sock'
 }
 
 mysql_database 'metastore' do
