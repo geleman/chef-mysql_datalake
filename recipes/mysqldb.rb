@@ -36,7 +36,7 @@ mysql_config node['mysql_config']['instance_name'] do
 end
 
 execute 'remove old innodb log files' do
-  command 'rm /data/mysql/ib_logfile*'
+  command 'rm -f /data/mysql/ib_logfile*'
   user 'root'
   action :run
 end

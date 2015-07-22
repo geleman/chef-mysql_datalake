@@ -8,19 +8,6 @@ mysql_connection_info = {
   :socket => '/tmp/mysqld.sock'
 }
 
-mysql_database 'metastore' do
-  connection mysql_connection_info
-  action :create
-end
-
-mysql_database_user 'hiveuser' do
-  connection mysql_connection_info
-  database_name 'metastore'
-  host '10.84.%'
-  password hiveopts['password']
-  action :grant
-end
-
 cookbook_file '/tmp/hive-schema-0.13.0.mysql.sql' do
   source 'hive-schema-0.13.0.mysql.sql'
   owner 'root'
@@ -28,13 +15,18 @@ cookbook_file '/tmp/hive-schema-0.13.0.mysql.sql' do
   action :create
 end
 
-mysql_database 'metastore' do
-  connection mysql_connection_info
-  sql 'source /tmp/hive-schema-0.13.0.mysql.sql;'
+bash 'source metastore' do
+  user 'root'
+  code "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock -e 'create database metastore;use metastore;source /tmp/hive-schema-0.13.0.mysql.sql;'"
+  not_if "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock -e 'show databases' | grep metastore"
+  action :run
 end
 
- execute 'import_schema' do
-   command "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock metastore < /tmp/hive-schema-0.13.0.mysql.sql;"
-   action :run
- end
-
+mysql_database_user 'hiveuser' do
+  connection mysql_connection_info
+  database_name 'metastore'
+  host '10.84.%'
+  password hiveopts['password']
+  privileges [:select, :update, :insert, :delete]
+  action :grant
+end
