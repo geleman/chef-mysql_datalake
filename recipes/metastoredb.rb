@@ -27,6 +27,6 @@ mysql_database_user 'hiveuser' do
   database_name 'metastore'
   host '10.84.%'
   password hiveopts['password']
-  privileges [:select, :update, :insert, :delete]
+  privileges [:all]
   action :grant
 end
