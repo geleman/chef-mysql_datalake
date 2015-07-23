@@ -16,7 +16,7 @@ cookbook_file '/tmp/hive-schema-0.13.0.mysql.sql' do
 end
 
 bash 'source metastore' do
-  user 'root'
+  user 'mysql'
   code "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock -e 'create database metastore;use metastore;source /tmp/hive-schema-0.13.0.mysql.sql;'"
   not_if "mysql -uroot -p#{opts['password']} -S /tmp/mysqld.sock -e 'show databases' | grep metastore"
   action :run
